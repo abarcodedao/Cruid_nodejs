@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý danh sách khoa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Quản lý danh sách khoa</h1>
+        <div class="d-flex justify-content-between mb-3">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">Tạo mới khoa</button>
+            <input type="text" class="form-control w-50" placeholder="Nhập ID hoặc tên khoa" id="searchInput" oninput="filterCourses()" />
+        </div>
+
+        <div class="table-responsive"> <!-- Để cho bảng có khả năng cuộn -->
+            <table class="table table-hover table-bordered" id="coursesTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Số thứ tự</th>
+                        <th>Tên Khoa</th>
+                        <th>Số CBGV</th>
+                        <th>ID</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% courses.forEach((course, index) => { %>
+                        <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= course.name %></td>
+                            <td><%= course.description %></td>
+                            <td><%= course._id %></td>
+                            <td>
+                                <a href="/<%= course._id %>/edit" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                <form action="/<%= course._id %>?_method=DELETE" method="POST" style="display:inline;">
+                                    <button class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa khoa này?');"><i class="fas fa-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Tạo Mới Khoa -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Tạo khoa mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/" method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Tên khoa</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Số CBGV</label>
+                            <input type="text" class="form-control" id="description" name="description" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Tạo khoa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        function filterCourses() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('coursesTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) { // Bắt đầu từ 1 để bỏ qua header
+                const cells = rows[i].getElementsByTagName('td');
+                const nameCell = cells[1].innerText.toLowerCase(); // Tên Khoa
+                const idCell = cells[3].innerText.toLowerCase(); // ID
+
+                if (nameCell.includes(filter) || idCell.includes(filter)) {
+                    rows[i].style.display = ""; // Hiện hàng
+                } else {
+                    rows[i].style.display = "none"; // Ẩn hàng
+                }
+            }
+        }
+    </script>
+</body>
+</html>

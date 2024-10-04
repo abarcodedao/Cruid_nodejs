@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật thông tin khoa</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Cập nhật thông tin khoa</h1>
+        <form action="/<%= course._id %>?_method=PUT" method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Tên khoa</label>
+                <input type="text" class="form-control" id="name" name="name" value="<%= course.name %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Số CBGV</label>
+                <input type="text" class="form-control" id="description" name="description" value="<%= course.description %>" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
